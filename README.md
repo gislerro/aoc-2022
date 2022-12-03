@@ -1,4 +1,4 @@
-AOC 2022 Solutions written in Rust
+AOC 2022 Solutions written in Rust using [Cargo AOC Helper](https://github.com/gobanos/cargo-aoc)
 
 ## Solving a puzzle
 ### Writing a generator (parser)
@@ -20,7 +20,7 @@ pub fn solve_partX(input: &[T]) -> u32 {
 }
 ```
 
-## Running your solution
+## Running a solution
 `cargo aoc` to run the latest implemented day (and downloading the input file if needed)
 
 `cargo aoc -d {day} -p {part}` for running a specific part

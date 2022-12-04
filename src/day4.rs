@@ -5,13 +5,13 @@ use itertools::Itertools;
 type Assignments = (RangeInclusive<u32>, RangeInclusive<u32>);
 
 fn parse_range(range_str: &str) -> RangeInclusive<u32> {
-   let mut parts = range_str.split('-');
-   if let Ok(a) = parts.next().unwrap().parse::<u32>() {
-      if let Ok(b) = parts.next().unwrap().parse::<u32>() {
-         return a..=b
-      }
-   }
-   unreachable!()
+   range_str
+      .split('-')
+      .take(2)
+      .filter_map(|s| s.parse::<u32>().ok())
+      .next_tuple()
+      .map(|(a, b)| a..=b)
+      .unwrap()
 }
 
 fn range_contained(r1: &RangeInclusive<u32>, r2: &RangeInclusive<u32>) -> bool {

@@ -1,9 +1,8 @@
-use itertools::Itertools;
-
 use std::ops::RangeInclusive;
 
-type Assignments = (RangeInclusive<u32>, RangeInclusive<u32>);
+use itertools::Itertools;
 
+type Assignments = (RangeInclusive<u32>, RangeInclusive<u32>);
 
 fn parse_range(range_str: &str) -> RangeInclusive<u32> {
    let mut parts = range_str.split('-');
@@ -24,12 +23,16 @@ fn range_overlaps(r1: &RangeInclusive<u32>, r2: &RangeInclusive<u32>) -> bool {
 }
 
 #[aoc_generator(day4)]
-pub fn parse_assignments<'a>(input: &'a str) -> Vec<Assignments> {
+pub fn parse_assignments(input: &str) -> Vec<Assignments> {
    input
       .lines()
       .map(|l| {
-         let mut split = l.split(',');
-         (parse_range(split.next().unwrap()), parse_range(split.next().unwrap()))
+         l
+            .split(',')
+            .take(2)
+            .map(|r_str| parse_range(r_str))
+            .collect_tuple()
+            .unwrap()
       })
       .collect()
 }

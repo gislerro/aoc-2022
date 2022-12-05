@@ -25,7 +25,7 @@ fn parse_supply_stacks<'a, L>(stacks: L) -> Vec<Stack>
    parsed
 }
 
-fn parse_moves(move_str: &str) -> Move {
+fn parse_move(move_str: &str) -> Move {
    move_str
       .split(' ')
       .filter_map(|s| s.parse::<usize>().ok())
@@ -46,7 +46,7 @@ pub fn parse_cargo(input: &str) -> Crates {
    lines.next();
 
    let moves = lines
-      .map(parse_moves)
+      .map(parse_move)
       .collect();
 
    (stacks, moves)

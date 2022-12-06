@@ -26,7 +26,6 @@ fn find_marker(k: usize, (n, stream): &DataStream) -> usize {
             let m = (stream.as_bytes()[i - (k - 1)] - b'a') as usize;
             if (seen >> m) & 1 == 1 && last_seen[m] == i - (k - 1) {
                 seen &= !(1 << m);
-                last_seen[m] = 0;
                 distinct -= 1;
             }
         }

@@ -1,16 +1,15 @@
-type DataStream = (usize, String);
-
 #[aoc_generator(day6)]
-pub fn parse(input: &str) -> DataStream {
-    (input.len(), input.into())
+pub fn parse(input: &str) -> String {
+    input.into()
 }
 
-fn find_marker(k: usize, (n, stream): &DataStream) -> usize {
+fn find_marker(k: usize, stream: &String) -> usize {
     let mut seen: u32 = 0;
     let mut last_seen = vec![0; 26];
     let mut distinct: usize = 0;
 
-    for i in 0..*n {
+    for i in 0..stream.len() {
+        // input is ASCII so can index by bytes
         let m = (stream.as_bytes()[i] - b'a') as usize;
         if (seen >> m) & 1 == 0 {
             seen |= 1 << m;
@@ -34,23 +33,21 @@ fn find_marker(k: usize, (n, stream): &DataStream) -> usize {
 }
 
 #[aoc(day6, part1)]
-pub fn solve_part1(stream: &DataStream) -> usize {
+pub fn solve_part1(stream: &String) -> usize {
     find_marker(4, stream)
 }
 
 #[aoc(day6, part2)]
-pub fn solve_part2(stream: &DataStream) -> usize {
+pub fn solve_part2(stream: &String) -> usize {
     find_marker(14, stream)
 }
 
 mod tests {
-    use super::*;
-
-    const EXAMPLE1: &str = "mjqjpqmgbljsphdztnvjfqwrcgsmlb";
 
     #[test]
     fn check_part2() {
-        let generated = parse(EXAMPLE1);
-        assert_eq!(solve_part2(&generated), 19);
+        const EXAMPLE1: &str = "mjqjpqmgbljsphdztnvjfqwrcgsmlb";
+        let generated = super::parse(EXAMPLE1);
+        assert_eq!(super::solve_part2(&generated), 19);
     }
 }

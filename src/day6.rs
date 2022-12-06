@@ -34,7 +34,7 @@ fn find_marker(k: usize, (n, stream): &DataStream) -> usize {
 }
 
 #[aoc(day6, part1)]
-pub fn solve_part1<'a>(stream: &DataStream) -> usize {
+pub fn solve_part1(stream: &DataStream) -> usize {
     find_marker(4, stream)
 }
 
@@ -46,11 +46,11 @@ pub fn solve_part2(stream: &DataStream) -> usize {
 mod tests {
     use super::*;
 
-    const example1: &str = "mjqjpqmgbljsphdztnvjfqwrcgsmlb";
+    const EXAMPLE1: &str = "mjqjpqmgbljsphdztnvjfqwrcgsmlb";
 
     #[test]
     fn check_part2() {
-        let generated = parse(example1);
+        let generated = parse(EXAMPLE1);
         assert_eq!(solve_part2(&generated), 19);
     }
 }

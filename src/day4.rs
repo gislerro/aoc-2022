@@ -29,7 +29,7 @@ pub fn parse_assignments(input: &str) -> Vec<Assignments> {
         .map(|l| {
             l.split(',')
                 .take(2)
-                .map(|r_str| parse_range(r_str))
+                .map(parse_range)
                 .collect_tuple()
                 .unwrap()
         })

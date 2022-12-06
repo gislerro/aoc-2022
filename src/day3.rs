@@ -7,7 +7,7 @@ pub fn get_priority(c: char) -> u32 {
 }
 
 #[aoc_generator(day3)]
-pub fn parse_rucksack<'a>(input: &'a str) -> Vec<Compartments> {
+pub fn parse_rucksack(input: &str) -> Vec<Compartments> {
     input
         .lines()
         .map(|l| {
@@ -22,7 +22,7 @@ pub fn solve_part1(input: &[Compartments]) -> u32 {
     input
         .iter()
         .map(|(left, right)| {
-            let dup = left.chars().filter(|c| right.contains(*c)).next().unwrap();
+            let dup = left.chars().find(|c| right.contains(*c)).unwrap();
             get_priority(dup)
         })
         .sum()
@@ -38,8 +38,7 @@ pub fn solve_part2(input: &[Compartments]) -> u32 {
             let badge = a
                 .chars()
                 .filter(|ac| b.contains(*ac))
-                .filter(|abc| c.contains(*abc))
-                .next()
+                .find(|abc| c.contains(*abc))
                 .unwrap();
             get_priority(badge)
         })

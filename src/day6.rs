@@ -23,7 +23,7 @@ fn find_marker(k: usize, stream: &String) -> usize {
 
         if i >= k - 1 {
             let m = (stream.as_bytes()[i - (k - 1)] - b'a') as usize;
-            if (seen >> m) & 1 == 1 && last_seen[m] == i - (k - 1) {
+            if last_seen[m] == i - (k - 1) {
                 seen &= !(1 << m);
                 distinct -= 1;
             }

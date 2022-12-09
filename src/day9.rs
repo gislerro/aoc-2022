@@ -25,7 +25,7 @@ impl<const SIZE: usize> Rope<SIZE> {
         head.1 += dy;
 
         for i in 1..SIZE {
-            if !(self.touching(i)) {
+            if !self.touching(i) {
                 self.repair(i)
             }
         }
@@ -52,10 +52,6 @@ impl<const SIZE: usize> Rope<SIZE> {
 
         current.0 += dx.signum();
         current.1 += dy.signum();
-
-        if !self.touching(i) {
-            unreachable!("repair isn't working!")
-        }
     }
 }
 
@@ -82,16 +78,15 @@ fn make_steps<const SIZE: usize>(moves: &[Move]) -> usize {
     let mut rope = Rope::<SIZE>::new();
 
     for (direction, amount) in moves {
-        let steps = iter::repeat(match direction {
+        for step in iter::repeat(match direction {
             'R' => (1, 0),
             'L' => (-1, 0),
             'U' => (0, 1),
             'D' => (0, -1),
             _ => unreachable!(),
         })
-        .take(*amount as usize);
-
-        for step in steps {
+        .take(*amount as usize)
+        {
             rope.step(step);
         }
     }

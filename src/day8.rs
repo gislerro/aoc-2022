@@ -20,11 +20,11 @@ where
     for (i, j) in range {
         distance += 1;
         if trees[i][j] >= height {
-            return (true, distance);
+            return (false, distance);
         }
     }
 
-    (false, distance)
+    (true, distance)
 }
 
 // Naive, brute force solution
@@ -38,32 +38,24 @@ fn solve((i, j): (usize, usize), trees: &TreeGrid) -> (bool, usize) {
     let mut scenic = 1;
 
     // left
-    let (occluded, distance) = occlusion(tree_height, iter::repeat(i).zip((0..j).rev()), trees);
-    if !occluded {
-        visible = true;
-    }
-    scenic *= distance;
+    let (v, d) = occlusion(tree_height, iter::repeat(i).zip((0..j).rev()), trees);
+    visible |= v;
+    scenic *= d;
 
     // right
-    let (occluded, distance) = occlusion(tree_height, iter::repeat(i).zip(j + 1..width), trees);
-    if !occluded {
-        visible = true;
-    }
-    scenic *= distance;
+    let (v, d) = occlusion(tree_height, iter::repeat(i).zip(j + 1..width), trees);
+    visible |= v;
+    scenic *= d;
 
     // top
-    let (occluded, distance) = occlusion(tree_height, ((0..i).rev()).zip(iter::repeat(j)), trees);
-    if !occluded {
-        visible = true;
-    }
-    scenic *= distance;
+    let (v, d) = occlusion(tree_height, ((0..i).rev()).zip(iter::repeat(j)), trees);
+    visible |= v;
+    scenic *= d;
 
     // bottom
-    let (occluded, distance) = occlusion(tree_height, (i + 1..height).zip(iter::repeat(j)), trees);
-    if !occluded {
-        visible = true;
-    }
-    scenic *= distance;
+    let (v, d) = occlusion(tree_height, (i + 1..height).zip(iter::repeat(j)), trees);
+    visible |= v;
+    scenic *= d;
 
     (visible, scenic)
 }

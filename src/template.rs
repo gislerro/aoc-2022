@@ -23,7 +23,7 @@ mod tests {
     fn check_part1() {
         const EXAMPLE1: &str = "1";
         let generated = super::parse(EXAMPLE1);
-        assert_eq!(super::solve_part2(&generated), 0);
+        assert_eq!(super::solve_part1(&generated), 0);
     }
 
     #[test]

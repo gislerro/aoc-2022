@@ -51,13 +51,10 @@ pub fn parse_monkeys(input: &str) -> Vec<Monkey> {
         .map(|(_, items, operation, divisor, if_true, if_false)| {
             let mut op_split = operation.split(' ').skip(4);
             let op = match op_split.next() {
-                Some("*") => {
-                    let n = op_split.next().and_then(|x| x.parse::<u32>().ok());
-                    match n {
-                        Some(n) => Operation::Mult(n),
-                        None => Operation::Square,
-                    }
-                }
+                Some("*") => match op_split.next().and_then(|x| x.parse::<u32>().ok()) {
+                    Some(n) => Operation::Mult(n),
+                    None => Operation::Square,
+                },
                 Some("+") => Operation::Add(
                     op_split
                         .next()
@@ -134,9 +131,7 @@ pub fn solve_part1(input: &[Monkey]) -> usize {
 pub fn solve_part2(input: &[Monkey]) -> usize {
     // AOC runner doesn't let me take in &mut [Monkey]
     let mut monkeys: Vec<Monkey> = input.to_vec();
-
     let modulo = monkeys.iter().map(|m| m.test.divisor).product();
-
     solve::<10_000>(&mut monkeys, Some(modulo))
 }
 

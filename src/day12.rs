@@ -1,4 +1,4 @@
-use std::{cmp::Ordering, collections::VecDeque};
+use std::collections::VecDeque;
 
 type Coord = (usize, usize);
 
@@ -91,7 +91,10 @@ struct Path {
     coord: Coord,
 }
 
-fn distances(map: &HeightMap) -> Vec<Vec<usize>> {
+fn distance<F>(map: &HeightMap, termination: F) -> usize
+where
+    F: Fn(Coord) -> bool,
+{
     let mut dist = vec![vec![std::usize::MAX; map.width()]; map.height()];
     // uniform distance - no prioqueue needed
     let mut queue = VecDeque::<Path>::new();
@@ -105,6 +108,10 @@ fn distances(map: &HeightMap) -> Vec<Vec<usize>> {
 
     // BFS
     while let Some(Path { cost, coord }) = queue.pop_front() {
+        if termination(coord) {
+            return cost;
+        }
+
         if cost > dist[coord.0][coord.1] {
             continue;
         }
@@ -122,30 +129,17 @@ fn distances(map: &HeightMap) -> Vec<Vec<usize>> {
         }
     }
 
-    dist
+    unreachable!("couldnt find termination criteria!");
 }
 
 #[aoc(day12, part1)]
 pub fn solve_part1(map: &HeightMap) -> usize {
-    distances(map)[map.start.0][map.start.1]
+    distance(map, |coord| coord == map.start)
 }
 
 #[aoc(day12, part2)]
 pub fn solve_part2(map: &HeightMap) -> usize {
-    let dist = distances(map);
-
-    let mut min = std::usize::MAX;
-    for i in 0..dist.len() {
-        for j in 0..dist[0].len() {
-            if let Some(c) = map.get((i, j)) {
-                if *c == b'a' && dist[i][j] < min {
-                    min = dist[i][j]
-                }
-            }
-        }
-    }
-
-    min
+    distance(map, |coord| *map.get(coord).unwrap() == b'a')
 }
 
 mod tests {

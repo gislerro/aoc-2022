@@ -85,25 +85,10 @@ pub fn parse_heightmap(input: &str) -> HeightMap {
     }
 }
 
-#[derive(Copy, Clone, Eq, PartialEq)]
+#[derive(Copy, Clone)]
 struct Path {
     cost: usize,
     coord: Coord,
-}
-
-impl Ord for Path {
-    fn cmp(&self, other: &Self) -> Ordering {
-        other
-            .cost
-            .cmp(&self.cost)
-            .then_with(|| self.coord.cmp(&other.coord))
-    }
-}
-
-impl PartialOrd for Path {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
 }
 
 fn distances(map: &HeightMap) -> Vec<Vec<usize>> {

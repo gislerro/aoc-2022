@@ -1,41 +1,41 @@
 use core::panic;
 
 pub enum Action {
-    ROCK,
-    PAPER,
-    SCISSOR,
+    Rock,
+    Paper,
+    Scissor,
 }
 
 impl Action {
     fn outcome(&self, other: &Action) -> Outcome {
-        use Action::{PAPER, ROCK, SCISSOR};
+        use Action::{Paper, Rock, Scissor};
         match (self, other) {
-            (ROCK, ROCK) => Outcome::DRAW,
-            (ROCK, PAPER) => Outcome::LOSS,
-            (ROCK, SCISSOR) => Outcome::WIN,
+            (Rock, Rock) => Outcome::Draw,
+            (Rock, Paper) => Outcome::Loss,
+            (Rock, Scissor) => Outcome::Win,
 
-            (PAPER, ROCK) => Outcome::WIN,
-            (PAPER, PAPER) => Outcome::DRAW,
-            (PAPER, SCISSOR) => Outcome::LOSS,
+            (Paper, Rock) => Outcome::Win,
+            (Paper, Paper) => Outcome::Draw,
+            (Paper, Scissor) => Outcome::Loss,
 
-            (SCISSOR, ROCK) => Outcome::LOSS,
-            (SCISSOR, PAPER) => Outcome::WIN,
-            (SCISSOR, SCISSOR) => Outcome::DRAW,
+            (Scissor, Rock) => Outcome::Loss,
+            (Scissor, Paper) => Outcome::Win,
+            (Scissor, Scissor) => Outcome::Draw,
         }
     }
 
     fn score(&self, other: &Action) -> u32 {
-        use Action::{PAPER, ROCK, SCISSOR};
+        use Action::{Paper, Rock, Scissor};
         let own = match self {
-            ROCK => 1,
-            PAPER => 2,
-            SCISSOR => 3,
+            Rock => 1,
+            Paper => 2,
+            Scissor => 3,
         };
-        use Outcome::{DRAW, LOSS, WIN};
+        use Outcome::{Draw, Loss, Win};
         let outcome = match self.outcome(other) {
-            LOSS => 0,
-            DRAW => 3,
-            WIN => 6,
+            Loss => 0,
+            Draw => 3,
+            Win => 6,
         };
 
         own + outcome
@@ -43,25 +43,25 @@ impl Action {
 }
 
 enum Outcome {
-    LOSS,
-    DRAW,
-    WIN,
+    Loss,
+    Draw,
+    Win,
 }
 
 impl Outcome {
     pub fn score(&self, other: &Action) -> u32 {
-        use Action::{PAPER, ROCK, SCISSOR};
-        use Outcome::{DRAW, LOSS, WIN};
+        use Action::{Paper, Rock, Scissor};
+        use Outcome::{Draw, Loss, Win};
         match (self, other) {
-            (LOSS, ROCK) => Action::SCISSOR,
-            (LOSS, PAPER) => Action::ROCK,
-            (LOSS, SCISSOR) => Action::PAPER,
-            (DRAW, ROCK) => Action::ROCK,
-            (DRAW, PAPER) => Action::PAPER,
-            (DRAW, SCISSOR) => Action::SCISSOR,
-            (WIN, ROCK) => Action::PAPER,
-            (WIN, PAPER) => Action::SCISSOR,
-            (WIN, SCISSOR) => Action::ROCK,
+            (Loss, Rock) => Action::Scissor,
+            (Loss, Paper) => Action::Rock,
+            (Loss, Scissor) => Action::Paper,
+            (Draw, Rock) => Action::Rock,
+            (Draw, Paper) => Action::Paper,
+            (Draw, Scissor) => Action::Scissor,
+            (Win, Rock) => Action::Paper,
+            (Win, Paper) => Action::Scissor,
+            (Win, Scissor) => Action::Rock,
         }
         .score(other)
     }
@@ -76,9 +76,9 @@ pub fn parse_strategy(input: &str) -> Vec<Round> {
         .map(|l| {
             let mut parsed = l.trim().split(' ');
             let opponent = match parsed.next().unwrap() {
-                "A" => Action::ROCK,
-                "B" => Action::PAPER,
-                "C" => Action::SCISSOR,
+                "A" => Action::Rock,
+                "B" => Action::Paper,
+                "C" => Action::Scissor,
                 _ => panic!("unexpected character!"),
             };
             (opponent, parsed.next().unwrap().chars().next().unwrap())
@@ -92,9 +92,9 @@ pub fn solve_part1(input: &[Round]) -> u32 {
         .iter()
         .map(|(opponent, me)| {
             match me {
-                'X' => Action::ROCK,
-                'Y' => Action::PAPER,
-                'Z' => Action::SCISSOR,
+                'X' => Action::Rock,
+                'Y' => Action::Paper,
+                'Z' => Action::Scissor,
                 _ => panic!("unexpected character!"),
             }
             .score(opponent)
@@ -108,9 +108,9 @@ pub fn solve_part2(input: &[Round]) -> u32 {
         .iter()
         .map(|(opponent, me)| {
             match me {
-                'X' => Outcome::LOSS,
-                'Y' => Outcome::DRAW,
-                'Z' => Outcome::WIN,
+                'X' => Outcome::Loss,
+                'Y' => Outcome::Draw,
+                'Z' => Outcome::Win,
                 _ => panic!("unexpected character!"),
             }
             .score(opponent)

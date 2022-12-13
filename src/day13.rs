@@ -26,7 +26,7 @@ impl Packet {
             Some(']') => None,
             Some('a') => Some(Packet::Integer(10)), // kek
             Some(n) => Some(Packet::Integer(
-                n.to_digit(10).expect("coulnd't parse integer!"),
+                n.to_digit(10).expect("couldn't parse integer!"),
             )),
             _ => unreachable!(),
         }

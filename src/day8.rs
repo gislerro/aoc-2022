@@ -91,28 +91,24 @@ pub fn solve_part2(trees: &TreeGrid) -> usize {
         .unwrap_or_default()
 }
 
+
+#[cfg(test)]
 mod tests {
+
+    const EXAMPLE: &str = "30373
+25512
+65332
+33549
+35390";
 
     #[test]
     fn check_part1() {
-        const EXAMPLE: &str = "30373
-        25512
-        65332
-        33549
-        35390";
-
         let generated = super::parse(EXAMPLE);
         assert_eq!(super::solve_part1(&generated), 21);
     }
 
     #[test]
     fn check_part2() {
-        const EXAMPLE: &str = "30373
-        25512
-        65332
-        33549
-        35390";
-
         let generated = super::parse(EXAMPLE);
         assert_eq!(super::solve_part2(&generated), 8);
     }

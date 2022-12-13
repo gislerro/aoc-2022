@@ -131,6 +131,7 @@ pub fn solve_part2(instructions: &[Instruction]) -> String {
         .collect::<String>()
 }
 
+#[cfg(test)]
 mod tests {
 
     const EXAMPLE: &str = "addx 15

@@ -142,27 +142,24 @@ pub fn solve_part2(map: &HeightMap) -> usize {
     distance(map, |coord| *map.get(coord).unwrap() == b'a')
 }
 
+#[cfg(test)]
 mod tests {
 
-    #[test]
-    fn check_part1() {
-        const EXAMPLE1: &str = "Sabqponm
+    const EXAMPLE: &str = "Sabqponm
 abcryxxl
 accszExk
 acctuvwj
 abdefghi";
-        let generated = super::parse_heightmap(EXAMPLE1);
+
+    #[test]
+    fn check_part1() {
+        let generated = super::parse_heightmap(EXAMPLE);
         assert_eq!(super::solve_part1(&generated), 31);
     }
 
     #[test]
     fn check_part2() {
-        const EXAMPLE2: &str = "Sabqponm
-abcryxxl
-accszExk
-acctuvwj
-abdefghi";
-        let generated = super::parse_heightmap(EXAMPLE2);
+        let generated = super::parse_heightmap(EXAMPLE);
         assert_eq!(super::solve_part2(&generated), 29);
     }
 }

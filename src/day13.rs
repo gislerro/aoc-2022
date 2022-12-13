@@ -117,8 +117,8 @@ pub fn solve_part2(packets: &[Packet]) -> usize {
         .product()
 }
 
+#[cfg(test)]
 mod tests {
-
     const EXAMPLE: &str = "[1,1,3,1,1]
 [1,1,5,1,1]
 

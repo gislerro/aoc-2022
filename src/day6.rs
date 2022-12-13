@@ -42,12 +42,14 @@ pub fn solve_part2(stream: &String) -> usize {
     find_marker(14, stream)
 }
 
+#[cfg(test)]
 mod tests {
+
+    const EXAMPLE: &str = "mjqjpqmgbljsphdztnvjfqwrcgsmlb";
 
     #[test]
     fn check_part2() {
-        const EXAMPLE1: &str = "mjqjpqmgbljsphdztnvjfqwrcgsmlb";
-        let generated = super::parse(EXAMPLE1);
+        let generated = super::parse(EXAMPLE);
         assert_eq!(super::solve_part2(&generated), 19);
     }
 }

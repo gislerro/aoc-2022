@@ -104,6 +104,7 @@ pub fn solve_part2(moves: &[Move]) -> usize {
     make_steps::<10>(moves)
 }
 
+#[cfg(test)]
 mod tests {
 
     #[test]

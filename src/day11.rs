@@ -135,8 +135,8 @@ pub fn solve_part2(input: &[Monkey]) -> usize {
     solve::<10_000>(&mut monkeys, Some(modulo))
 }
 
+#[cfg(test)]
 mod tests {
-
     const EXAMPLE: &str = "Monkey 0:
   Starting items: 79, 98
   Operation: new = old * 19

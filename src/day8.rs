@@ -91,7 +91,6 @@ pub fn solve_part2(trees: &TreeGrid) -> usize {
         .unwrap_or_default()
 }
 
-
 #[cfg(test)]
 mod tests {
 

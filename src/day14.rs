@@ -82,12 +82,9 @@ pub fn solve_part1((rocks, abyss): &(Rocks, i32)) -> usize {
 pub fn solve_part2((rocks, abyss): &(Rocks, i32)) -> usize {
     let mut sand = HashSet::<Coord>::new();
 
-    while let Some(coord) = simulate_grain(
-        |_grain| !sand.contains(&(500, 0)),
-        Some(abyss + 2),
-        rocks,
-        &sand,
-    ) {
+    while let Some(coord) =
+        simulate_grain(|_| !sand.contains(&(500, 0)), Some(abyss + 2), rocks, &sand)
+    {
         sand.insert(coord);
     }
 

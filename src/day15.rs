@@ -1,6 +1,6 @@
-use std::ops::Range;
 use itertools::Itertools;
 use rayon::prelude::{IntoParallelIterator, ParallelIterator};
+use std::ops::Range;
 
 pub struct Diamond {
     center: (i32, i32),
@@ -82,16 +82,18 @@ pub fn solve_part1(diamonds: &[Diamond]) -> usize {
 
 #[aoc(day15, part2)]
 pub fn solve_part2(diamonds: &[Diamond]) -> i64 {
-
-    (0..4_000_000).into_par_iter().find_map_any(|y| {
-        let occupied = find_occupied(y, diamonds);
-        if occupied.len() == 2 {
-            let x = occupied[0].end + 1;
-            Some((x as i64) * 4_000_000 + y as i64)
-        } else {
-            None
-        }
-    }).unwrap()
+    (0..4_000_000)
+        .into_par_iter()
+        .find_map_any(|y| {
+            let occupied = find_occupied(y, diamonds);
+            if occupied.len() == 2 {
+                let x = occupied[0].end + 1;
+                Some((x as i64) * 4_000_000 + y as i64)
+            } else {
+                None
+            }
+        })
+        .unwrap()
 }
 
 #[cfg(test)]

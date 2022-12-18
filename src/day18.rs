@@ -23,7 +23,7 @@ const ADJACENT: [Cube; 6] = [
 ];
 
 impl Cube {
-    
+
     fn sides(&self) -> impl Iterator<Item = Cube> + '_ {
         ADJACENT.iter().map(|adj| *self + *adj)
     }
@@ -57,7 +57,6 @@ impl Cube {
         });
 
         // consider the sides adjacent to the outside cube (4 sides)
-        let delta = *outside - *self;
         let outoutside = *outside + delta;
         let three = outside.sides().filter_map(move |adj| {
             if adj != outoutside && adj != *self {

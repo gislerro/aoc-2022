@@ -23,7 +23,6 @@ const ADJACENT: [Cube; 6] = [
 ];
 
 impl Cube {
-
     fn sides(&self) -> impl Iterator<Item = Cube> + '_ {
         ADJACENT.iter().map(|adj| *self + *adj)
     }

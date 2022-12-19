@@ -1,5 +1,4 @@
-use std::cmp::max;
-use std::collections::HashMap;
+use std::collections::HashSet;
 
 use itertools::Itertools;
 use rayon::prelude::*;
@@ -30,7 +29,7 @@ pub fn parse(input: &str) -> Vec<Blueprint> {
         .collect()
 }
 
-type Cache = HashMap<State, Mem>;
+type Cache = HashSet<State>;
 
 #[derive(Eq, PartialEq, Hash, Copy, Clone)]
 struct Counts {
@@ -47,18 +46,30 @@ struct State {
     robots: Counts,
 }
 
+fn gauss(n: u32) -> u32 {
+    n * (n + 1) / 2
+}
+
 fn solve<const MINUTES: u8>(
     blueprint: &Blueprint,
     state: State,
     max_robots: &Counts,
     memo: &mut Cache,
-) -> Mem {
-    if state.minute == MINUTES {
-        return state.goods.geode;
+    best: &mut Mem,
+) {
+    if state.minute == MINUTES && state.goods.geode > *best {
+        *best = state.goods.geode
     }
 
-    if let Some(geodes) = memo.get(&state) {
-        return *geodes;
+    let remaining = MINUTES as u32 - state.minute as u32;
+    if state.goods.geode as u32 + state.robots.geode as u32 * remaining + gauss(remaining)
+        <= *best as u32
+    {
+        return;
+    }
+
+    if memo.contains(&state) {
+        return;
     }
 
     let next_goods = Counts {
@@ -68,85 +79,81 @@ fn solve<const MINUTES: u8>(
         geode: state.goods.geode + state.robots.geode,
     };
 
-    let mut ans = solve::<MINUTES>(
-        blueprint,
-        State {
-            minute: state.minute + 1,
-            goods: next_goods,
-            robots: state.robots,
-        },
-        max_robots,
-        memo,
-    );
-
     // greedily build geode robot
     if state.goods.ore >= blueprint.geode.0
         && state.goods.obsidian >= blueprint.geode.1
         && state.robots.geode + 1 < max_robots.geode
     {
-        ans = max(
+        solve::<MINUTES>(
+            blueprint,
+            State {
+                minute: state.minute + 1,
+                goods: Counts {
+                    ore: next_goods.ore - blueprint.geode.0,
+                    obsidian: next_goods.obsidian - blueprint.geode.1,
+                    ..next_goods
+                },
+                robots: Counts {
+                    geode: state.robots.geode + 1,
+                    ..state.robots
+                },
+            },
+            max_robots,
+            memo,
+            best,
+        );
+    } else {
+        // just collect resources
+        solve::<MINUTES>(
+            blueprint,
+            State {
+                minute: state.minute + 1,
+                goods: next_goods,
+                robots: state.robots,
+            },
+            max_robots,
+            memo,
+            best,
+        );
+
+        // try building the others
+        if state.goods.ore >= blueprint.ore && state.robots.ore + 1 < max_robots.ore {
             solve::<MINUTES>(
                 blueprint,
                 State {
                     minute: state.minute + 1,
                     goods: Counts {
-                        ore: next_goods.ore - blueprint.geode.0,
-                        obsidian: next_goods.obsidian - blueprint.geode.1,
+                        ore: next_goods.ore - blueprint.ore,
                         ..next_goods
                     },
                     robots: Counts {
-                        geode: state.robots.geode + 1,
+                        ore: state.robots.ore + 1,
                         ..state.robots
                     },
                 },
                 max_robots,
                 memo,
-            ),
-            ans,
-        );
-    } else {
-        // try building the others
-        if state.goods.ore >= blueprint.ore && state.robots.ore + 1 < max_robots.ore {
-            ans = max(
-                solve::<MINUTES>(
-                    blueprint,
-                    State {
-                        minute: state.minute + 1,
-                        goods: Counts {
-                            ore: next_goods.ore - blueprint.ore,
-                            ..next_goods
-                        },
-                        robots: Counts {
-                            ore: state.robots.ore + 1,
-                            ..state.robots
-                        },
-                    },
-                    max_robots,
-                    memo,
-                ),
-                ans,
+                best,
             );
         }
 
         if state.goods.ore >= blueprint.clay && state.robots.clay + 1 < max_robots.clay {
-            ans = max(
-                solve::<MINUTES>(
-                    blueprint,
-                    State {
-                        minute: state.minute + 1,
-                        goods: Counts {
-                            ore: next_goods.ore - blueprint.clay,
-                            ..next_goods
-                        },
-                        robots: Counts {
-                            clay: state.robots.clay + 1,
-                            ..state.robots
-                        },
+            solve::<MINUTES>(
+                blueprint,
+                State {
+                    minute: state.minute + 1,
+                    goods: Counts {
+                        ore: next_goods.ore - blueprint.clay,
+                        ..next_goods
                     },
-                    max_robots,
-                    memo,
-                ),
-                ans,
+                    robots: Counts {
+                        clay: state.robots.clay + 1,
+                        ..state.robots
+                    },
+                },
+                max_robots,
+                memo,
+                best,
             );
         }
 
@@ -154,31 +161,28 @@ fn solve<const MINUTES: u8>(
             && state.goods.clay >= blueprint.obsidian.1
             && state.robots.obsidian + 1 < max_robots.obsidian
         {
-            ans = max(
-                solve::<MINUTES>(
-                    blueprint,
-                    State {
-                        minute: state.minute + 1,
-                        goods: Counts {
-                            ore: next_goods.ore - blueprint.obsidian.0,
-                            clay: next_goods.clay - blueprint.obsidian.1,
-                            ..next_goods
-                        },
-                        robots: Counts {
-                            obsidian: state.robots.obsidian + 1,
-                            ..state.robots
-                        },
+            solve::<MINUTES>(
+                blueprint,
+                State {
+                    minute: state.minute + 1,
+                    goods: Counts {
+                        ore: next_goods.ore - blueprint.obsidian.0,
+                        clay: next_goods.clay - blueprint.obsidian.1,
+                        ..next_goods
                     },
-                    max_robots,
-                    memo,
-                ),
-                ans,
-            );
+                    robots: Counts {
+                        obsidian: state.robots.obsidian + 1,
+                        ..state.robots
+                    },
+                },
+                max_robots,
+                memo,
+                best,
+            )
         }
     }
 
-    memo.insert(state, ans);
-    ans
+    memo.insert(state);
 }
 
 fn max_geodes<const MINUTES: u8>(blueprint: &Blueprint) -> Mem {
@@ -213,7 +217,10 @@ fn max_geodes<const MINUTES: u8>(blueprint: &Blueprint) -> Mem {
         obsidian: blueprint.geode.1 + 1,
         geode: Mem::MAX,
     };
-    solve::<MINUTES>(blueprint, state, &max_robots, &mut cache)
+
+    let mut best = 0;
+    solve::<MINUTES>(blueprint, state, &max_robots, &mut cache, &mut best);
+    best
 }
 
 #[aoc(day19, part1)]

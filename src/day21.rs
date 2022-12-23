@@ -81,13 +81,13 @@ impl Display for Expression {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Num(n) => match n {
-                Some(n) => write!(f, "{}", n),
+                Some(n) => write!(f, "{n}"),
                 None => write!(f, "x"),
             },
-            Self::Add(a, b) => write!(f, "({}+{})", a, b),
-            Self::Sub(a, b) => write!(f, "({}-{})", a, b),
-            Self::Mul(a, b) => write!(f, "({}*{})", a, b),
-            Self::Div(a, b) => write!(f, "({}/{})", a, b),
+            Self::Add(a, b) => write!(f, "({a}+{b})"),
+            Self::Sub(a, b) => write!(f, "({a}-{b})"),
+            Self::Mul(a, b) => write!(f, "({a}*{b})"),
+            Self::Div(a, b) => write!(f, "({a}/{b})"),
         }
     }
 }

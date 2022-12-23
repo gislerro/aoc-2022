@@ -32,7 +32,7 @@ pub fn solve_part1(input: &[Compartments]) -> u32 {
 pub fn solve_part2(input: &[Compartments]) -> u32 {
     input
         .iter()
-        .map(|(l, r)| format!("{}{}", l, r))
+        .map(|(l, r)| format!("{l}{r}"))
         .tuples::<(_, _, _)>()
         .map(|(a, b, c)| {
             let badge = a

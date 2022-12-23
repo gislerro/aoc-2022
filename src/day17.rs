@@ -62,7 +62,7 @@ fn fall(
 ) {
     let rock = get_rock(rock_idx);
 
-    let mut position = (2, *height as i64 + 3);
+    let mut position = (2, *height + 3);
     if rock_idx == 1 {
         position.1 += 1;
     }
@@ -113,7 +113,7 @@ fn _print(height: i64, fallen: &Fallen) {
     for y in (0..height).rev() {
         print!("|");
         for x in 0..7 {
-            if fallen.contains(&(x, y as i64)) {
+            if fallen.contains(&(x, y)) {
                 print!("#")
             } else {
                 print!(".")
@@ -183,11 +183,8 @@ pub fn solve_part2(winds: &String) -> i64 {
         rock_idx = (rock_idx + 1) % 5;
 
         if let Some((k, h)) = cycles.get(&relief) {
-            println!(
-                "detected cycle between {} to {}, heights: {} -> {}",
-                k, i, h, height
-            );
-            rounds_remaining = target - i as i64;
+            println!("detected cycle between {k} to {i}, heights: {h} -> {height}");
+            rounds_remaining = target - i;
             round_delta = i - k;
             height_delta = height - h;
             break;

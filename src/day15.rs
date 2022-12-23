@@ -27,8 +27,7 @@ pub fn parse(input: &str) -> Vec<Diamond> {
     input
         .replace("x=", "")
         .replace("y=", "")
-        .replace(':', "")
-        .replace(',', "")
+        .replace([':', ','], "")
         .lines()
         .map(|l| {
             l.split(' ')

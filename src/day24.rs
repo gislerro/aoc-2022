@@ -206,12 +206,10 @@ pub fn solve_part2(basin: &Basin) -> usize {
         .into_par_iter()
         .map(|k| basin.blizzard_at(k))
         .collect();
+
     let a = solve(&basin.start, &basin.end, basin, 0, &blizzards);
     let b = solve(&basin.end, &basin.start, basin, a, &blizzards);
     let c = solve(&basin.start, &basin.end, basin, a + b, &blizzards);
-
-    println!("{a}, {b}, {c}");
-
     a + b + c
 }
 

@@ -75,7 +75,7 @@ impl Basin {
                 ds.iter().map(move |&d| {
                     let dp: Vec2 = d.into();
                     let mut p = p - Vec2 { x: 1, y: 1 };
-                    p = p + dp * k as i32;
+                    p += dp * k as i32;
                     p.x = p.x.rem_euclid(self.width as i32 - 2) + 1;
                     p.y = p.y.rem_euclid(self.height as i32 - 2) + 1;
                     (p, d)
